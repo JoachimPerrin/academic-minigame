@@ -1,15 +1,10 @@
-#ifndef __UILABELS__
-#define __UILABELS__
+#ifndef LABELS_HPP
+#define LABELS_HPP
 
 #include "ECS.hpp"
 #include "Transform.hpp"
 #include <SDL2/SDL.h>
 #include <string>
-
-// static SDL_Color _black = {  0,   0,   0, 255};
-// static SDL_Color _red   = {255,   0,   0, 255};
-// static SDL_Color _green = {  0, 255,   0, 255};
-// static SDL_Color _blue  = {  0,   0, 255, 255};
 
 namespace ecs
 {
@@ -21,22 +16,30 @@ namespace ecs
     class Label : public Component
     {
     public:
-        Label(SDL_Rect dst,
-              std::string text,
-              std::string font = "Dundalk",
-              SDL_Color color = {255, 255, 255, 255});
+        Label(SDL_Rect dst, std::string text, bool mobile = false, SDL_Color color = {255, 255, 255, 255}, std::string font = "Dundalk");
 
-        void SetLabelText();
+        void SetText(std::string text);
+        void SetFont(std::string font);
+        void SetColor(SDL_Color color);
 
+        void Init() override;
         void Render() override;
         void Update() override;
 
+    private: // FIXME: ces variables doivent pour certaines redevenir public
+        void SetLabelText();
+
+        Transform *transform;
+        SDL_Texture *labelTexture;
+
         SDL_Rect dstRect;
         SDL_Rect srcRect;
-        std::string labelText;
-        std::string labelFont;
-        SDL_Color textColor;
-        SDL_Texture *labelTexture;
+
+        std::string text;
+        bool mobile;
+        SDL_Color color;
+        std::string font;
     };
 }
+
 #endif

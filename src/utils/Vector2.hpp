@@ -69,11 +69,9 @@ public:
     friend bool operator!=(const Vector2 &vec1, const Vector2 &vec2);
 
     Vector2 &zero();
-
+    friend std::ostream &operator<<(std::ostream &stream, const Vector2 &vec);
     float x;
     float y;
-
-    friend std::ostream &operator<<(std::ostream &stream, const Vector2 &vec);
 };
 
 #endif

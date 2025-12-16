@@ -1,0 +1,69 @@
+@startuml ECS_Class_Diagram
+
+class Entity {
+    + bool IsActive() const
+    + void Destroy()
+    + void Update()
+    + void Render()
+    + void AddGroup(Group mGroup)
+    + void DelGroup(Group mGroup)
+    + bool HasGroup(Group mGroup)
+    - bool active
+    - std::vector<std::unique_ptr<Component>> components
+    - ComponentArray componentArray
+    - ComponentBitSet componentBitSet
+    - GroupBitSet groupBitSet
+}
+
+class Component {
+    + virtual void Init()
+    + virtual void Update()
+    + virtual void Render()
+    + virtual ~Component()
+    * Entity *entity
+}
+
+Entity <|-- Component
+
+class EntitiesManager {
+    + void Update()
+    + void Render()
+    + void Refresh()
+    + void AddToGroup(Entity *mEntity, Group mGroup)
+    + std::vector<Entity *> &GetGroup(Group mGroup)
+    + Entity &AddEntity()
+    + void ClearEntities(int mGroup)
+    - std::vector<std::unique_ptr<Entity>> entities
+    - std::array<std::vector<Entity*>, maxGroups> groupedEntities
+}
+
+EntitiesManager "1" -- "*" Entity
+
+class Transform {
+    + Vector2 position
+    + Vector2 velocity
+    + Vector2 size
+    + Vector2 scale
+}
+
+class Sprite {
+    + string texture
+    + bool animated
+}
+
+class Stat {
+    + int health
+    + bool isShotReady()
+    + void setLastShot()
+}
+
+class CircularCollider {                  
+    + string tag
+}
+
+Component <|-- Transform
+Component <|-- Sprite
+Component <|-- Stat
+Component <|-- CircularCollider
+
+@enduml

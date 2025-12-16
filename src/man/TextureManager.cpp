@@ -7,7 +7,6 @@ SDL_Texture *TextureManager::LoadTexture(const std::string imagePath)
 {
     SDL_Surface *tempSurface = nullptr;
     SDL_Texture *newTexture = nullptr;
-
     tempSurface = IMG_Load(imagePath.c_str());
     if (tempSurface == nullptr)
     {
@@ -27,12 +26,14 @@ SDL_Texture *TextureManager::LoadTexture(const std::string imagePath)
 
 void TextureManager::Render(SDL_Texture *tex, SDL_Rect src, SDL_Rect dest, SDL_RendererFlip renderflip)
 {
-    if (tex == nullptr) {
+    if (tex == nullptr)
+    {
         std::cerr << "Texture is nullptr, cannot render!" << std::endl;
         return;
     }
     // Si elle est visible, on l'affiche
-    if (SDL_RenderCopyEx(Game::renderer, tex, &src, &dest, 0.0, nullptr, renderflip)) {
+    if (SDL_RenderCopyEx(Game::renderer, tex, &src, &dest, 0.0, nullptr, renderflip))
+    {
         std::cerr << "Echec d'affichage de la texture ! " << SDL_GetError() << std::endl;
     }
 }

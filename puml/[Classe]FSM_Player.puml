@@ -1,0 +1,146 @@
+@startuml [Classe]FSM_Player
+title FSM Player - Component ECS
+
+
+class PlayingState {
+    +PlayingState()
+    +~PlayingState()
+    +void Enter(Game &game) 
+    +void Exit(Game &game)
+    +void HandleEvent(Game &game)
+    +void Update(Game &game)
+    +void Render(Game &game)
+    +bool Execute(const PlayingActions action)
+
+    -int score
+    -static MapManager *mapManager
+    -static SDL_Rect camera
+    -PlayingStates currentState
+    -static const int nbStates
+    -PlayingActions actions[nbStates][nbGeneralInputs]
+
+}
+
+class Entity {
+    +Entity(EntitiesManager &eManager)
+    +void Update()
+    +void Render()
+    +bool IsActive() const
+    +void Destroy()
+    +bool HasGroup(Group mGroup)
+    +void AddGroup(Group mGroup)
+    +void DelGroup(Group mGroup)
+    
+    +template <typename T> bool HasComponent() const
+    +template <typename T, typename... TArgs> T &AddComponent(TArgs &&...mArgs)
+    +template <typename T> T &GetComponent() const
+
+    -bool active
+    -EntitiesManager &manager
+    -std::vector<std::unique_ptr<Component>> components
+    -ComponentArray componentArray
+    -ComponentBitSet componentBitSet
+    -GroupBitSet groupBitSet
+    }
+
+
+class Player {
+    + Transform
+    + Sprite
+    + Stat
+    + CircularCollider
+    + FSM<PlayerState, PlayerInput, nbPlayerStates, nbPlayerInputs>
+}
+
+Entity <|-- Player
+
+class Component {
+    + Entity *entity;
+
+    + virtual void Init() {}
+    + virtual void Update() {}
+    + virtual void Render() {}
+
+    + virtual ~Component() {}
+}
+
+class FSM {
+    - State currentState
+    - std::array<std::array<State, INPUT_COUNT>, STATE_COUNT> transitions
+    - std::array<std::array<std::function<void()>, INPUT_COUNT>, STATE_COUNT> actions
+    --
+    + FSM(State initialState, transitions, actions)
+    + void handleInput(Input input)
+    + State getState() const
+}
+
+class Transform {
+    + Vector2 position
+    + Vector2 velocity
+    + Vector2 size
+    + Vector2 scale
+}
+
+class Sprite {
+    + string texture
+    + bool animated
+}
+
+class Stat {
+    + int health
+    + bool isShotReady()
+    + void setLastShot()
+}
+
+class CircularCollider {
+    + string tag
+}
+
+Component <|-- Transform
+Component <|-- Sprite
+Component <|-- Stat
+Component <|-- FSM
+Component <|-- CircularCollider
+
+enum PlayerState {
+    S_IDLE_JOUEUR
+    S_RUNNING_JOUEUR
+    S_INVENTORY_JOUEUR
+}
+
+enum PlayerInput {
+    I_MOVE
+    I_INVENTORY
+    I_ATTACK
+    I_NONE
+}
+
+class ComponentManager {
+    + static void JoueurMouvement(keys, player)
+    + static void InventaireOpen(player)
+    + static void InventaireClose(player)
+    + static void Tir(keys, player)
+    + static void JoueurStopMouvement(player)
+}
+
+note top of ComponentManager
+    Les Classes Managers peuvent uniquement lire et 
+    avoir accès aux components des entités par contre 
+    c'est uniquement dans ComponentManager qu'existe 
+    les fonctions qui modifient les components des entités.
+end note
+
+Player *-- FSM
+Player *-- Transform
+Player *-- Sprite
+Player *-- Stat
+Player *-- CircularCollider
+
+FSM "1" -- "*" PlayerState
+FSM "1" -- "*" PlayerInput
+
+ComponentManager <.. FSM : "Appelle les actions nécessaires en fonctions de l'input"
+
+PlayingState ..> FSM : "Envoie les inputs dans la FSM du Joueur"
+
+@enduml

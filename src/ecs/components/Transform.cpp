@@ -35,9 +35,8 @@ namespace ecs
         {
             speed += entity->GetComponent<Stat>().GetSpeed();
         }
-
         position.x += velocity.x * speed;
         position.y += velocity.y * speed;
-        rotation += torque * speed;
+        //rotation += torque * speed;
     }
 }

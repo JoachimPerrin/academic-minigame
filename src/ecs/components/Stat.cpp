@@ -3,7 +3,7 @@
 namespace ecs
 {
     Stat::Stat()
-        : speed(10), hp(100), lastShot(SDL_GetTicks()), shotDelay(400), weapon(allyProjectile) {} // peut-e^tre faire un choix de perso avec des stats différentes
+        : speed(10), hp(1000), lastShot(SDL_GetTicks()), shotDelay(400), weapon(allyProjectile) {} // peut-e^tre faire un choix de perso avec des stats différentes
 
     bool Stat::IsShotReady()
     {
@@ -34,7 +34,6 @@ namespace ecs
         {
             entity->Destroy();
         }
-        
     }
 
     ProjectileType Stat::GetWeapon() { return weapon; }
@@ -42,4 +41,6 @@ namespace ecs
     int Stat::GetSpeed() { return speed; }
     void Stat::Hurt(int damage) { hp -= damage; }
     void Stat::Healed(int heal) { hp += heal; }
+    unsigned int Stat::GetLastShot() { return lastShot; }
+    unsigned int Stat::GetShotDelay() { return shotDelay; }
 }

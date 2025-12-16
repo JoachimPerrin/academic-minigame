@@ -47,4 +47,4 @@ run: $(TARGET)
 # Si on arrive à faire un script de lancement propre je jouit
 
 # Cibles spéciales
-.PHONY: all clean run
+.PHONY: all clean run test

@@ -4,8 +4,9 @@
 
 using namespace ecs;
 MapManager::MapManager()
- : currentMap(nullptr), textureID("defaultString"), mapScale(4), tileSize(32)
-{}
+    : currentMap(nullptr), textureID("defaultString"), mapScale(4), tileSize(32)
+{
+}
 
 MapManager::~MapManager() { delete currentMap; }
 

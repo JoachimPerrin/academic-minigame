@@ -5,7 +5,7 @@
 namespace ecs
 {
     Projectile::Projectile(int rng, Vector2 v, ProjectileType t)
-        : velocity(v), type(t), range(rng) 
+        : velocity(v), type(t), range(rng)
     {
         speed = std::sqrt(std::pow(v.x, 2) + std::pow(v.y, 2));
     }

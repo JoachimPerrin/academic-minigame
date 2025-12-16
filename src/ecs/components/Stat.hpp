@@ -21,6 +21,10 @@ namespace ecs
         void Healed(int heal);
         void Update();
 
+        unsigned int GetLastShot();
+        unsigned int GetShotDelay();
+
+
         friend class KeyboardController;
 
     private:

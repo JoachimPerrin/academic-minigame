@@ -1,0 +1,32 @@
+services:
+  game-devel:
+    image: game_cpp:devel
+    platform: linux/amd64
+    build:
+      context: .
+      target: devel
+    environment:
+      - DISPLAY=host.docker.internal:0
+      - XDG_RUNTIME_DIR=/tmp/runtime
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - .:/home # Mount the current directory to the container for live code updates
+    stdin_open: true
+    tty: true
+    profiles: [ "devel" ]
+    command: bash
+    cap_add:
+      - SYS_PTRACE
+
+  game-run:
+    image: game_cpp:final
+    platform: linux/amd64
+    build:
+      context: .
+      target: final
+    environment:
+      - DISPLAY=host.docker.internal:0
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    profiles: [ "run" ]
+    command: /home/Game

@@ -1,5 +1,6 @@
 #include "AssetsManager.hpp"
 #include "TextureManager.hpp"
+#include "AudioManager.hpp"
 #include <iostream>
 
 using namespace ecs; // à retirer éventuellement
@@ -29,6 +30,14 @@ AssetManager::~AssetManager()
         TTF_CloseFont(font);
     }
     fonts.clear();
+
+    for (auto &pair : audios)
+    {
+        Mix_HaltMusic();
+        Mix_FreeMusic(pair.second);
+    }
+    audios.clear();
+    Mix_CloseAudio();
 }
 
 void AssetManager::ClearTextures()
@@ -104,4 +113,25 @@ void AssetManager::AddFont(std::string id, const std::string path, int fontSize)
 TTF_Font *AssetManager::GetFont(std::string id)
 {
     return fonts[id];
+}
+
+void AssetManager::AddAudio(std::string id, std::string path)
+{
+    Mix_Music *audio = AudioManager::LoadAudio(path);
+    if (audio == NULL)
+    {
+        std::cout << "error loading audio" << std::endl;
+    }
+    audios.emplace(id, audio);
+    std::cout << "allocation de l'audio " << id << std::endl;
+}
+
+Mix_Music *AssetManager::GetAudio(std::string id)
+{
+    if (audios.find(id) != audios.end())
+    {
+        return audios[id];
+    }
+    std::cout << "audio not found" << std::endl;
+    return nullptr;
 }

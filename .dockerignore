@@ -1,0 +1,9 @@
+.git
+.gitignore
+.vscode/
+build/
+TODO.md
+README.md
+out/
+puml/
+*.md

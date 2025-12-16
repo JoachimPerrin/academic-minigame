@@ -26,7 +26,7 @@ namespace ecs
     class Sprite : public Component
     {
     public:
-        Sprite(std::string id, bool isAnimated);
+        Sprite(std::string id, bool isAnimated = false);
 
         void Init() override;
         void Update() override;

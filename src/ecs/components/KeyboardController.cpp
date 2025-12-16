@@ -101,7 +101,7 @@
 //                 {
 //                     Game::gobjs->CreateProjectile(Vector2(transform->position.x, transform->position.y),
 //                     Vector2(-20.0, 0.0),
-//                     10000, 2, entity->GetComponent<Stat>().GetWeapon()); 
+//                     10000, 2, entity->GetComponent<Stat>().GetWeapon());
 //                 }
 //                 else if (dir == 2)
 //                 {

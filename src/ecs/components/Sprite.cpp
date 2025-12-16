@@ -12,7 +12,7 @@ namespace ecs
      * @param id
      * @param isAnimated
      */
-    Sprite::Sprite(std::string id, bool isAnimated = false)
+    Sprite::Sprite(std::string id, bool isAnimated)
         : animated(isAnimated)
     {
         if (isAnimated)
@@ -20,7 +20,7 @@ namespace ecs
             if (id == "Robot")
             {
                 Animation walk = Animation(0, 20, 50);
-                Animation idle = Animation(1, 20, 150);
+                Animation idle = Animation(1, 20, 100);
                 animations.emplace("Idle", idle);
                 animations.emplace("Walk", walk);
                 Play("Idle");
@@ -57,6 +57,10 @@ namespace ecs
      */
     void Sprite::Init()
     {
+        if (!entity->HasComponent<Transform>())
+        {
+            entity->AddComponent<Transform>();
+        }
         transform = &entity->GetComponent<Transform>();
         srcRect = {0,
                    0,
@@ -82,6 +86,15 @@ namespace ecs
     }
 
     /**
+     * @brief Render the Sprite component.
+     *
+     */
+    void Sprite::Render()
+    {
+        TextureManager::Render(texture, srcRect, destRect, spriteflip);
+    }
+
+    /**
      * @brief Set the Texture object
      *
      * @param id The id of the texture to set int the assets manager.
@@ -91,15 +104,6 @@ namespace ecs
         texture = Game::assets->GetTexture(id);
         if (texture == nullptr)
             std::cout << "attention, le sprite de " << id << " n'est pas chargé" << std::endl;
-    }
-
-    /**
-     * @brief Render the Sprite component.
-     *
-     */
-    void Sprite::Render()
-    {
-        TextureManager::Render(texture, srcRect, destRect, spriteflip);
     }
 
     /**

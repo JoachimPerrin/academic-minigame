@@ -106,7 +106,7 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY)
                     break;
                 case 8:
                     tcol.GetComponent<ecs::Transform>().SetPos(Vector2(x * scaledTileSize, y * scaledTileSize));
-                    tcol.GetComponent<ecs::Transform>().SetSize(Vector2(scaledTileSize, scaledTileSize ));
+                    tcol.GetComponent<ecs::Transform>().SetSize(Vector2(scaledTileSize, scaledTileSize));
                     tcol.AddComponent<ecs::AABBCollider>("terrain");
                     break;
                 default:

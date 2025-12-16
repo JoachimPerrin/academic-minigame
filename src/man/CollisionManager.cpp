@@ -1,23 +1,19 @@
 #include "CollisionManager.hpp"
 #include "ComponentManager.hpp"
+#include "Label.hpp"
 #include "Game.hpp"
 
 void CollisionManager::GlideCollision(ecs::Entity *entity, Vector2 vec)
 {
-    // std::cout << "vec : " << vec << std::endl;
     if (entity->HasComponent<ecs::Transform>())
     {
-        // std::cout << vec << std::endl;
         Vector2 normal = vec.Normal();
-        // std::cout << normal << std::endl;
         Vector2 vel = entity->GetComponent<ecs::Transform>().GetVel();
-        // std::cout << vel << std::endl;
-        // std::cout << "Projection  : " << vel.Project(vel, vec) << std::endl;
         if (vel.Project(vel, vec).x * vec.x > 0 || vel.Project(vel, vec).y * vec.y > 0)
         {
-            // std::cout << "Vel :" << vel << "Vel projeté" << vel.Project(vel, normal) << std::endl;
-            ecs::ComponentManager::EntitySetVelocity(*entity, vel.Project(vel, normal));
-            // entity->GetComponent<ecs::Transform>().SetVel(vel.Project(vel, normal));
+            if (entity->HasComponent<ecs::Label>())
+                vec = Vector2();
+            ecs::ComponentManager::EntitySetVelocity(*entity, vel.Project(vel, normal) - vec);
         }
     }
 }
@@ -29,13 +25,9 @@ void CollisionManager::ReboundCollision(ecs::Entity *entity, Vector2 vec)
         // Reverse the velocity based on the normal
         if ((vec * Vector2(0.01, 0.01)).magnitude() > 0.3)
         {
-            //TODO: ComponentManager
+            // TODO: ComponentManager
             entity->GetComponent<ecs::Transform>().SetVel(vec * Vector2(0.005, 0.005));
         }
-        // else
-        // {
-        //     entity->GetComponent<ecs::Transform>().SetVel(Vector2(0, 0));
-        // }
     }
 }
 
@@ -58,8 +50,6 @@ void CollisionManager::Update(ecs::EntitiesManager &EMan)
 
     for (auto &player : players)
     {
-        if (!player)
-            continue; // Check if player is valid
         for (auto &col : colidable)
         {
             if (player->HasComponent<ecs::CircularCollider>() && col->HasComponent<ecs::AABBCollider>())
@@ -67,7 +57,6 @@ void CollisionManager::Update(ecs::EntitiesManager &EMan)
                 vec = player->GetComponent<ecs::CircularCollider>().IsColliding(col->GetComponent<ecs::AABBCollider>());
                 if (vec != nullvect)
                 {
-
                     // std::cout << "Collision" << std::endl;
                     GlideCollision(player, vec);
                 }
@@ -89,8 +78,6 @@ void CollisionManager::Update(ecs::EntitiesManager &EMan)
     {
         for (auto &player : players)
         {
-            if (!enemy)
-                continue; // Check if enemy is valid
             if (enemy->HasComponent<ecs::CircularCollider>() && player->HasComponent<ecs::CircularCollider>())
             {
                 vec = enemy->GetComponent<ecs::CircularCollider>().IsColliding(player->GetComponent<ecs::CircularCollider>());
@@ -111,7 +98,6 @@ void CollisionManager::Update(ecs::EntitiesManager &EMan)
                 vec = enemy->GetComponent<ecs::CircularCollider>().IsColliding(col->GetComponent<ecs::AABBCollider>());
                 if (vec != nullvect)
                 {
-                    // std::cout << "Collision" << std::endl;
                     GlideCollision(enemy, vec);
                 }
             }
@@ -129,7 +115,7 @@ void CollisionManager::Update(ecs::EntitiesManager &EMan)
                     projectile->Destroy();
                     if (enemy->HasComponent<ecs::Stat>())
                     {
-                        enemy->GetComponent<ecs::Stat>().Hurt(10);
+                        enemy->GetComponent<ecs::Stat>().Hurt(500);
                     }
                 }
             }

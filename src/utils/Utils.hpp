@@ -13,15 +13,16 @@
 
 // ----------- PLAYINGSTATE -----------
 
-const int nbGeneralInputs = 7;
+const int nbGeneralInputs = 8;
 enum GeneralInputs { //Commun à, et utilisé par, tous les handleevent des state globaux (playingState, menuState...). (Keyboard inputs ou autre)
-    I_SPACE = 0,
-    I_T = 1, //Test 
-    I_MOVE_P1 = 2,    
-    I_MOVE_P2 = 3,    
-    I_LEFT = 4,
-    I_E1 = 5,
-    I_E2 = 6,
+    I_SPACE,
+    I_ATTACK_P1,
+    I_ATTACK_P2,
+    I_MOVE_P1,   
+    I_MOVE_P2,
+    I_INV_P1,
+    I_INV_P2,
+    I_PAUSE
     // I_TIMER = 7
 };
 
@@ -43,15 +44,16 @@ enum PlayingStates { //TODO: METTRE A JOUR pr l'instant se fier uniquement au ta
 // };
 
 enum PlayingActions {   // Actions qui son pour les entites (pas pour playing State)
-    A_NONE = -1,
-    A_MOVE_P1 = 0,
-    A_MOVE_P2 = 1,
-    A_ATTACK = 4,
-    A_JUMP = 5,
-    A_RUN = 6,
-    A_USE_ITEM = 7,
-    A_INVENTORY_OPEN = 8,
-    A_INVENTORY_CLOSE = 9
+    A_NONE,
+    A_MOVE_P1,
+    A_MOVE_P2,
+    A_ATTACK_P1,
+    A_ATTACK_P2,
+    A_JUMP,
+    A_RUN,
+    A_USE_ITEM,
+    A_INVENTORY_P1,
+    A_INVENTORY_P2
     // A_CRAFT = 11 ...
 };
 
@@ -64,15 +66,16 @@ const int nbPlayerStates = 3;
 enum PlayerState { S_IDLE_JOUEUR, S_RUNNING_JOUEUR, S_INVENTORY_JOUEUR };
 
 // Entrées du Joueur
-const int nbPlayerInputs = 3;
-enum PlayerInput { I_MOVE, I_INVENTORY, I_NONE};
+const int nbPlayerInputs = 4;
+enum PlayerInput { I_MOVE, I_INVENTORY, I_ATTACK, I_NONE};
 
 // Actions du Joueur
 enum PlayerAction { };
 
 // ----------- BOUTTON -----------
 // ...
-extern SDL_Scancode keysP1[5];
+extern SDL_Scancode keysP1[7];
+extern SDL_Scancode keysP2[7];
 
 void ExitWithError(const std::string errorMessage, SDL_Window *activeWindow = nullptr, SDL_Renderer *activeRenderer = nullptr);
 
